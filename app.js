@@ -9,6 +9,30 @@ var index = require('./routes/index');
 
 var app = express();
 
+// DB
+var knex = require('knex')({
+  client: 'mysql',
+  connection: {
+    host     : '127.0.0.1',
+    user     : 'root',
+    database : 'encuesta',
+    charset  : 'utf8'
+  }
+});
+
+var bookshelf = require('bookshelf')(knex);
+
+var User = bookshelf.Model.extend({
+  tableName: 'user'
+});
+
+User.where('user_id', 1).fetch().then(function(user) {
+  console.log(user.toJSON());
+}).catch(function(err) {
+  console.error(err);
+});
+// END DB
+
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
